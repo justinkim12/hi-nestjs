@@ -1,11 +1,14 @@
 import { Body, Controller, Delete, Get, Param, Patch, Post, Put, Query } from '@nestjs/common';
+import { MoviesService } from './movies.service';
 
 @Controller('movies')
 export class MoviesController {
 
+    constructor(private readonly moviesService: MoviesService){}
+
     @Get()
     getAll(){
-        return "This will return all";
+        return this.moviesService.getAll();
     }
 
     
@@ -17,18 +20,18 @@ export class MoviesController {
     //search가 위에 있어야 search 주소를 id로 생각 안 함
     @Get("/:id")
     getOne(@Param("id") id: string){
-        return `This will return movie with the id: ${id}`;
+        return this.moviesService.getOne(id);
     }
 
     @Post()
     create(@Body() movieData){
-        console.log(movieData);
-        return movieData;
+        this.moviesService.createMovie(movieData);
+
     }
 
     @Delete("/:id")
     remove(@Param("id") id: string){
-        return `This will delete a movie ${id}`;
+        return this.moviesService.deleteOne(id);
     }
 
     @Patch('/:id')
