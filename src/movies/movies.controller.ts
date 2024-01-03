@@ -1,43 +1,43 @@
 import { Body, Controller, Delete, Get, Param, Patch, Post, Put, Query } from '@nestjs/common';
 import { MoviesService } from './movies.service';
+import { CreateMovieDTO } from './entities/dto/create-movie.dto';
 
 @Controller('movies')
 export class MoviesController {
 
-    constructor(private readonly moviesService: MoviesService){}
+    constructor(private readonly moviesService: MoviesService) { }
 
     @Get()
-    getAll(){
+    getAll() {
         return this.moviesService.getAll();
     }
 
-    
+
     @Get("search")
-    search(@Query("year") searchingYear: string){
+    search(@Query("year") searchingYear: string) {
         return `We are searching for a movie made after: ${searchingYear}`;
     }
 
     //search가 위에 있어야 search 주소를 id로 생각 안 함
     @Get("/:id")
-    getOne(@Param("id") id: string){
+    getOne(@Param("id") id: number) {
         return this.moviesService.getOne(id);
     }
 
     @Post()
-    create(@Body() movieData){
+    create(@Body() movieData: CreateMovieDTO) {
         this.moviesService.createMovie(movieData);
-
     }
 
     @Delete("/:id")
-    remove(@Param("id") id: string){
+    remove(@Param("id") id: number) {
         return this.moviesService.deleteOne(id);
     }
 
     @Patch('/:id')
-    update(@Param("id") id:string, @Body() updatedData){
-        return updatedData;
-        
+    update(@Param("id") id: number, @Body() updatedData) {
+        return this.moviesService.updateMovie(id, updatedData)
+
     }
 
 
